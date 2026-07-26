@@ -1,0 +1,44 @@
+{
+  "selected": true,
+  "actuator_control_mode": "supply_node_setpoint",
+  "component_type": "System Node Setpoint",
+  "control_type": "Temperature Setpoint",
+  "actuator_key": "MAIN COOLING COIL 1 OUTLET NODE",
+  "callback": "after_predictor_after_hvac_managers",
+  "low_value_c": 22.0,
+  "high_value_c": 25.0,
+  "safe_range_c": {
+    "minimum": 22.0,
+    "maximum": 25.0
+  },
+  "low_run": {
+    "exit_code": 0,
+    "severe_errors": 0,
+    "warnings": 146,
+    "handle": 100,
+    "writes": 12734,
+    "samples": 9216
+  },
+  "high_run": {
+    "exit_code": 0,
+    "severe_errors": 0,
+    "warnings": 146,
+    "handle": 100,
+    "writes": 12756,
+    "samples": 9216
+  },
+  "physical_differences_high_minus_low": {
+    "zone_mean_air_temperature_c": 3.6699614281485466,
+    "zone_operative_temperature_c": 3.489186698484076,
+    "supply_outlet_temperature_c": 3.01718224766282,
+    "cooling_coil_outlet_temperature_c": 3.0,
+    "cooling_coil_electricity_rate_w": 1079.9948882231192,
+    "facility_hvac_electricity_rate_w": 1461.864624472004,
+    "facility_electricity_rate_w": 14739.449311861681
+  },
+  "physical_effect_pass": true,
+  "mock_validation_scenarios": 10,
+  "mock_validation_all_passed": true,
+  "ollama_integrated": false,
+  "readiness": "Ready for a real Ollama client boundary test; not ready for comfort, savings, or deployment claims."
+}

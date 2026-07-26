@@ -1,0 +1,313 @@
+{
+  "status": "pass",
+  "manual_review_status": "complete_with_caveats",
+  "provider": "nvidia_nim",
+  "model": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+  "configuration": {
+    "simulated_days": 1,
+    "supervisor_interval_hours": 3.0,
+    "timeout_s": 30.0,
+    "maximum_retries": 1,
+    "physical_setpoint_limits_c": [
+      22.0,
+      25.0
+    ],
+    "maximum_physical_change_c": 1.0
+  },
+  "output_directory": "test_reports\\nvidia_nim_one_day_output_20260726_184804",
+  "energyplus_exit_code": 0,
+  "energyplus_warning_count": 3,
+  "energyplus_severe_error_count": 0,
+  "simulation_wall_clock_s": 41.77044970006682,
+  "checks": {
+    "energyplus_exit_code_zero": true,
+    "zero_severe_errors": true,
+    "telemetry_complete": true,
+    "physical_setpoint_within_22_to_25_c": true,
+    "physical_change_within_1_c": true,
+    "all_policies_from_candidate_set": true,
+    "all_api_failures_fell_back_safely": true,
+    "exactly_one_day_of_control_timesteps": true,
+    "exactly_eight_supervisory_opportunities": true
+  },
+  "telemetry": {
+    "telemetry_rows": 144,
+    "missing_telemetry_fields": [],
+    "supervisory_opportunities": 8,
+    "llm_calls": 8,
+    "forced_single_candidate_decisions": 0,
+    "llm_failures": 0,
+    "unsafe_llm_failure_rows": 0,
+    "deterministic_fallbacks": 0,
+    "safety_corrections": 16,
+    "minimum_validated_setpoint_c": 22.0,
+    "maximum_validated_setpoint_c": 23.0,
+    "minimum_applied_setpoint_c": 22.0,
+    "maximum_applied_setpoint_c": 23.0,
+    "maximum_validated_change_c": 1.0,
+    "setpoints_within_limits": true,
+    "maximum_change_within_limit": true,
+    "candidate_provenance_violations": [],
+    "all_final_policies_from_candidate_set": true,
+    "all_failures_fell_back_safely": true,
+    "nvidia_response_reviews": [
+      {
+        "simulation_time": "1999-01-01 3.00 h (zone timestep #6)",
+        "candidate_ids": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "ranking": [
+          "P4",
+          "P3",
+          "P5",
+          "P6"
+        ],
+        "selected_policy_id": "P4",
+        "confidence": 0.85,
+        "reason": "Thermal deterioration takes priority. P4 balances energy conservation with a moderate thermal setting (medium) and a slightly elevated zone target (32.5\u00b0C), which aligns with the rising zone temperature trend and high power usage. It avoids aggressive energy saving that could risk further thermal deviation, while still addressing the rising power trend conservatively.",
+        "request_completed": true,
+        "retry_count": 0,
+        "failure_category": "",
+        "fallback_used": false
+      },
+      {
+        "simulation_time": "1999-01-01 6.08 h (zone timestep #6)",
+        "candidate_ids": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "ranking": [
+          "P4",
+          "P3",
+          "P5",
+          "P6"
+        ],
+        "selected_policy_id": "P4",
+        "confidence": 0.85,
+        "reason": "Thermal state is near target but rising, and power trend is rising with high power. P4 maintains the current energy conservative strategy, aligns with the current policy's aggressiveness, and sets a zone target close to the current temperature, minimizing thermal deterioration while managing energy use. P3 reduces energy usage but may risk thermal comfort. P5 increases the zone target, which could lead to thermal deterioration. P6 holds current settings but does not adjust the target, making it less proactive than P4.",
+        "request_completed": true,
+        "retry_count": 0,
+        "failure_category": "",
+        "fallback_used": false
+      },
+      {
+        "simulation_time": "1999-01-01 9.00 h (zone timestep #6)",
+        "candidate_ids": [
+          "P3",
+          "P6"
+        ],
+        "ranking": [
+          "P6",
+          "P3"
+        ],
+        "selected_policy_id": "P6",
+        "confidence": 0.85,
+        "reason": "Thermal deterioration takes priority over energy saving. The current thermal state is above target, and the zone trend is stable. P6 maintains the target temperature of 32.5\u00b0C, aligning with the current target_zone_temperature_c, and uses a conservative aggressiveness which is consistent with the current policy. Although P3 reduces energy usage, it lowers the zone_target_c to 32.0\u00b0C, which may not address the current thermal state effectively. Given the rising power trend and high power usage, maintaining thermal comfort with a conservative approach is prioritized.",
+        "request_completed": true,
+        "retry_count": 0,
+        "failure_category": "",
+        "fallback_used": false
+      },
+      {
+        "simulation_time": "1999-01-01 12.08 h (zone timestep #6)",
+        "candidate_ids": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "ranking": [
+          "P4",
+          "P3",
+          "P5",
+          "P6"
+        ],
+        "selected_policy_id": "P4",
+        "confidence": 0.85,
+        "reason": "Thermal deterioration takes priority. P4 maintains the target temperature of 32.5\u00b0C, aligns with the current conservative aggressiveness, and matches the high energy setting while being more efficient than P6. P3 is a close second but reduces energy usage, which is less critical than maintaining thermal comfort. P5 increases the zone target, which could worsen thermal deterioration, and P6 is less efficient than P4.",
+        "request_completed": true,
+        "retry_count": 0,
+        "failure_category": "",
+        "fallback_used": false
+      },
+      {
+        "simulation_time": "1999-01-01 15.00 h (zone timestep #6)",
+        "candidate_ids": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "ranking": [
+          "P4",
+          "P3",
+          "P5",
+          "P6"
+        ],
+        "selected_policy_id": "P4",
+        "confidence": 0.85,
+        "reason": "Thermal state is below target with a stable zone trend, indicating a need to prioritize thermal comfort. P4 maintains the current target temperature (32.5\u00b0C) and aligns with the current conservative aggressiveness and energy-conservative mode, ensuring minimal thermal deterioration while managing rising power and outdoor trends. P3 reduces energy usage but may risk thermal comfort by lowering the zone target. P5 and P6 are less favorable due to higher zone targets that may increase thermal discomfort or fail to address rising power trends effectively.",
+        "request_completed": true,
+        "retry_count": 0,
+        "failure_category": "",
+        "fallback_used": false
+      },
+      {
+        "simulation_time": "1999-01-01 18.08 h (zone timestep #6)",
+        "candidate_ids": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "ranking": [
+          "P4",
+          "P3",
+          "P5",
+          "P6"
+        ],
+        "selected_policy_id": "P4",
+        "confidence": 0.85,
+        "reason": "Thermal state is near target with a stable zone trend, but power trend is rising and high_power is true. Current policy is energy_conservative with conservative aggressiveness. P4 maintains the same mode and aggressiveness, keeps thermal at medium, and sets zone_target_c to 32.5, which is closer to the current_zone_temperature_c of 32.927 than P3's 32.0, thus prioritizing thermal stability over slight energy savings. P5 reduces thermal to low and increases zone_target_c to 33.0, which may risk thermal deterioration. P6 holds current settings but does not adjust zone_target_c, which is already slightly above target. P4 balances thermal and energy considerations best given the constraints.",
+        "request_completed": true,
+        "retry_count": 0,
+        "failure_category": "",
+        "fallback_used": false
+      },
+      {
+        "simulation_time": "1999-01-01 21.00 h (zone timestep #6)",
+        "candidate_ids": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "ranking": [
+          "P4",
+          "P3",
+          "P5",
+          "P6"
+        ],
+        "selected_policy_id": "P4",
+        "confidence": 0.85,
+        "reason": "Thermal state is near target and stable, but current temperature is above target. P4 maintains the current energy conservative strategy and target temperature, balancing thermal and energy considerations without introducing unnecessary changes. P3 reduces energy usage but may risk thermal comfort. P5 and P6 are less favorable due to higher target temperatures and potential thermal deterioration.",
+        "request_completed": true,
+        "retry_count": 0,
+        "failure_category": "",
+        "fallback_used": false
+      },
+      {
+        "simulation_time": "1999-01-01 24.08 h (zone timestep #6)",
+        "candidate_ids": [
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "ranking": [
+          "P4",
+          "P3",
+          "P5",
+          "P6"
+        ],
+        "selected_policy_id": "P4",
+        "confidence": 0.85,
+        "reason": "Thermal deterioration takes priority. P4 maintains the target temperature of 32.5\u00b0C, aligns with the current conservative aggressiveness and energy_high setting, and matches the current mode of energy_conservative. It balances thermal needs without over-adjusting energy usage, which is critical given the falling zone temperature and high power trend.",
+        "request_completed": true,
+        "retry_count": 0,
+        "failure_category": "",
+        "fallback_used": false
+      }
+    ]
+  },
+  "metrics_summary": {
+    "Controller Type": "PolicyAwareRuleController",
+    "EnergyPlus Exit Code": "0",
+    "Simulation Wall-Clock Duration Seconds": "41.335",
+    "Total Energy Consumption kWh": "2675.846847",
+    "Facility Energy kWh": "2675.846847",
+    "HVAC Energy kWh": "300.553464",
+    "Cooling-Coil Energy kWh": "160.875979",
+    "Average Sampled Facility Power kW": "111.493619",
+    "Energy Metric Source": "Facility Total Electricity Demand Rate [W]",
+    "Energy Conversion": "W -> kW, then kW * timestep hours -> kWh",
+    "Energy Samples Integrated": "144",
+    "Average Valid PMV": "Unavailable",
+    "PMV Comfort Threshold": "abs(PMV) > 0.500",
+    "Occupied Comfort Violation Rate": "Unavailable",
+    "Average Indoor Temperature C": "32.263707",
+    "Minimum Indoor Temperature C": "30.051370",
+    "Maximum Indoor Temperature C": "33.198974",
+    "Zone Temperature Target Threshold C": "30.000",
+    "Zone Temperature Target Violation Rate": "1.000000",
+    "Average Measured Supply-Air Temperature C": "22.436880",
+    "Total Control Timesteps": "144",
+    "Total Controller Decisions": "144",
+    "Total Reused Actions": "0",
+    "Total Supply-Air Setpoint Changes": "33",
+    "Actuator Change Definition": "one changed applied supply-air temperature setpoint",
+    "Total Safety Corrections": "16",
+    "Total LLM Requests": "0",
+    "Total LLM Failures": "0",
+    "Total RuleController Fallbacks": "0",
+    "Total LLM Cooldown Activations": "0",
+    "Average LLM Response Time Seconds": "Unavailable",
+    "P95 LLM Response Time Seconds": "Unavailable",
+    "Maximum LLM Response Time Seconds": "Unavailable",
+    "Total Supervisory Calls": "8",
+    "Successful Supervisory Calls": "8",
+    "Supervisory Parser Failures": "0",
+    "Supervisory Timeouts": "0",
+    "Supervisory Fallbacks": "0",
+    "Policy Validation Corrections": "0",
+    "Policy Changes": "3",
+    "Policy Reuse Count": "141",
+    "Default Policy Usage Count": "0",
+    "Supervisor Cooldown Activations": "0",
+    "Supervisor Cooldown Hours": "0.000000",
+    "Average Supervisory Latency Seconds": "5.103727",
+    "P95 Supervisory Latency Seconds": "7.651262",
+    "Maximum Supervisory Latency Seconds": "7.651262",
+    "Candidate Supervisory Opportunities": "8",
+    "Forced Single-Candidate Decisions": "0",
+    "Multi-Candidate LLM Calls": "8",
+    "Successful Valid Candidate Rankings": "8",
+    "Invalid Candidate Rankings": "0",
+    "Incomplete Candidate Rankings": "0",
+    "Duplicate-ID Candidate Rankings": "0",
+    "Unknown Candidate ID Attempts": "0",
+    "Low-Confidence Candidate Fallbacks": "0",
+    "Candidate Timeout Fallbacks": "0",
+    "Candidate Parser Failures": "0",
+    "Candidate Selection Distribution": "{'P4': 7, 'P6': 1}",
+    "Average Candidate Confidence": "0.850000",
+    "Median Supervisory Latency Seconds": "4.574663",
+    "Total NVIDIA NIM Calls": "8",
+    "Successful NVIDIA NIM Calls": "8",
+    "NVIDIA NIM Authentication Failures": "0",
+    "NVIDIA NIM Rate-Limit Failures": "0",
+    "NVIDIA NIM Timeouts": "0",
+    "NVIDIA NIM Network Failures": "0",
+    "NVIDIA NIM Server Failures": "0",
+    "NVIDIA NIM Deterministic Fallbacks": "0"
+  },
+  "manual_review": {
+    "responses_reviewed": 8,
+    "bounded_contract_compliance": "pass",
+    "selection_safety": "pass",
+    "semantic_precision": "mixed",
+    "deterministic_agreement": "8/8",
+    "findings": [
+      "Every response ranked all and only supplied candidates, selected the first-ranked ID, and avoided actuator or numeric policy output.",
+      "Every selected policy matched the deterministic recommendation; the run shows no distinct LLM selection contribution.",
+      "Several reasons incorrectly describe P3 as reducing energy use relative to P4 even though P4 has the higher energy-conservation priority.",
+      "Some reasons claim efficiency or thermal effects that are not established by the supplied candidate metadata.",
+      "The explanations are acceptable as non-authoritative diagnostics only; they are not reliable engineering justifications."
+    ]
+  }
+}

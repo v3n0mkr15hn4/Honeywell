@@ -1,0 +1,102 @@
+[
+  {
+    "candidate_id": "schedule_cooling",
+    "component_type": "Schedule:Compact",
+    "control_type": "Schedule Value",
+    "actuator_key": "COOLING RETURN AIR SETPOINT SCHEDULE",
+    "units": "",
+    "related_idf_object": "ThermostatSetpoint:DualSetpoint / DualSetPoint",
+    "expected_physical_effect": "Change the zone thermostat cooling schedule",
+    "risk_of_being_overridden": "Measured thermostat changes but active CRAC physics did not"
+  },
+  {
+    "candidate_id": "direct_zone_cooling",
+    "component_type": "Zone Temperature Control",
+    "control_type": "Cooling Setpoint",
+    "actuator_key": "MAIN ZONE",
+    "units": "C",
+    "related_idf_object": "ZoneControl:Thermostat / Main Zone Thermostat",
+    "expected_physical_effect": "Change zone cooling demand",
+    "risk_of_being_overridden": "Reported setpoint changed but measured zone load and HVAC response did not"
+  },
+  {
+    "candidate_id": "supply_outlet_temperature",
+    "component_type": "System Node Setpoint",
+    "control_type": "Temperature Setpoint",
+    "actuator_key": "SUPPLY OUTLET NODE",
+    "units": "C",
+    "related_idf_object": "SetpointManager:Warmest / Supply air control",
+    "expected_physical_effect": "Change air-loop supply temperature target",
+    "risk_of_being_overridden": "Warmest overwrites before the post-manager callback; MixedAir does not re-propagate after it"
+  },
+  {
+    "candidate_id": "coil_outlet_temperature",
+    "component_type": "System Node Setpoint",
+    "control_type": "Temperature Setpoint",
+    "actuator_key": "MAIN COOLING COIL 1 OUTLET NODE",
+    "units": "C",
+    "related_idf_object": "SetpointManager:MixedAir / Coil Exit Temp Manager 1 and CoilSystem:Cooling:DX / DX Cooling Coil System 1",
+    "expected_physical_effect": "Directly change the DX coil leaving-air target and physical CRAC response",
+    "risk_of_being_overridden": "Must be written after HVAC managers"
+  },
+  {
+    "candidate_id": "zone_inlet_temperature",
+    "component_type": "System Node Setpoint",
+    "control_type": "Temperature Setpoint",
+    "actuator_key": "MAIN ZONE INLET NODE",
+    "units": "C",
+    "related_idf_object": "AirTerminal:SingleDuct:VAV:NoReheat / Main Zone VAV Air",
+    "expected_physical_effect": "Set terminal outlet target",
+    "risk_of_being_overridden": "Not consumed as the DX cooling coil control node"
+  },
+  {
+    "candidate_id": "atu_inlet_temperature",
+    "component_type": "System Node Setpoint",
+    "control_type": "Temperature Setpoint",
+    "actuator_key": "MAIN ZONE ATU IN NODE",
+    "units": "C",
+    "related_idf_object": "AirLoopHVAC:ZoneSplitter / Zone Supply Air Splitter",
+    "expected_physical_effect": "Set the VAV branch inlet target",
+    "risk_of_being_overridden": "Air-loop and terminal simulation may ignore or replace it"
+  },
+  {
+    "candidate_id": "supply_schedule",
+    "component_type": "Schedule:Compact",
+    "control_type": "Schedule Value",
+    "actuator_key": "SUPPLY AIR SETPOINT SCHEDULE",
+    "units": "",
+    "related_idf_object": "Schedule:Compact / Supply Air Setpoint Schedule",
+    "expected_physical_effect": "Change a scheduled supply target",
+    "risk_of_being_overridden": "The schedule is unused by the active setpoint managers"
+  },
+  {
+    "candidate_id": "airloop_availability",
+    "component_type": "AirLoopHVAC",
+    "control_type": "Availability Status",
+    "actuator_key": "CRAC SYSTEM",
+    "units": "",
+    "related_idf_object": "AirLoopHVAC / CRAC system",
+    "expected_physical_effect": "Enable or disable the CRAC air loop",
+    "risk_of_being_overridden": "AvailabilityManager:Scheduled also controls availability"
+  },
+  {
+    "candidate_id": "system_availability_schedule",
+    "component_type": "Schedule:Compact",
+    "control_type": "Schedule Value",
+    "actuator_key": "SYSTEM AVAILABILITY SCHEDULE",
+    "units": "",
+    "related_idf_object": "AvailabilityManager:Scheduled / CRAC 1 Avail",
+    "expected_physical_effect": "Enable or disable HVAC equipment",
+    "risk_of_being_overridden": "Binary supervisory control, not a cooling setpoint"
+  },
+  {
+    "candidate_id": "coil_capacity",
+    "component_type": "Coil:Cooling:DX:SingleSpeed",
+    "control_type": "Autosized Rated Total Cooling Capacity",
+    "actuator_key": "MAIN COOLING COIL 1",
+    "units": "W",
+    "related_idf_object": "Coil:Cooling:DX:SingleSpeed / Main Cooling Coil 1",
+    "expected_physical_effect": "Change an autosized rated capacity",
+    "risk_of_being_overridden": "The IDF hard-sizes capacity; unsuitable for normal runtime control"
+  }
+]

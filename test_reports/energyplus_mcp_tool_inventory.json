@@ -1,0 +1,975 @@
+{
+  "captured_utc": "2026-07-26T20:00:00+05:30",
+  "server": {
+    "name": "energyplus-mcp-server",
+    "protocol_reported_version": "1.28.1",
+    "protocol_version": "2025-11-25"
+  },
+  "tool_count": 35,
+  "tools": [
+    {
+      "name": "copy_file",
+      "description": "\nCopy a file from source to target location with intelligent path resolution\n\nArgs:\n    source_path: Source file path. Can be:\n                - Absolute path: \"/full/path/to/file.idf\"\n                - Relative path: \"models/mymodel.idf\"\n                - Filename only: \"1ZoneUncontrolled.idf\" (searches in sample_files)\n                - Fuzzy name: Will search in sample_files, example_files, weather_data, etc.\n    target_path: Target path for the copy. Can be:\n                - Absolute path: \"/full/path/to/copy.idf\"\n                - Relative path: \"outputs/modified_file.idf\"  \n                - Filename only: \"my_copy.idf\" (saves to outputs directory)\n    overwrite: Whether to overwrite existing target file (default: False)\n    file_types: List of acceptable file extensions (e.g., [\".idf\", \".epw\"]). If None, accepts any file type.\n\nReturns:\n    JSON string with copy operation results including resolved paths, file sizes, and validation status\n    \nExamples:\n    # Copy IDF file with validation\n    copy_file(\"1ZoneUncontrolled.idf\", \"my_model.idf\", file_types=[\".idf\"])\n    \n    # Copy weather file\n    copy_file(\"USA_CA_San.Francisco.epw\", \"sf_weather.epw\", file_types=[\".epw\"])\n    \n    # Copy any file type\n    copy_file(\"sample.idf\", \"outputs/test.idf\", overwrite=True)\n    \n    # Copy with fuzzy matching (e.g., city name for weather files)\n    copy_file(\"san francisco\", \"my_weather.epw\", file_types=[\".epw\"])\n",
+      "input_schema": {
+        "properties": {
+          "source_path": {
+            "title": "Source Path",
+            "type": "string"
+          },
+          "target_path": {
+            "title": "Target Path",
+            "type": "string"
+          },
+          "overwrite": {
+            "default": false,
+            "title": "Overwrite",
+            "type": "boolean"
+          },
+          "file_types": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "File Types"
+          }
+        },
+        "required": [
+          "source_path",
+          "target_path"
+        ],
+        "title": "copy_fileArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "load_idf_model",
+      "description": "\nLoad and validate an EnergyPlus IDF file\n\nArgs:\n    idf_path: Path to the IDF file (can be absolute, relative, or just filename for sample files)\n\nReturns:\n    JSON string with model information and loading status\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "idf_path"
+        ],
+        "title": "load_idf_modelArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_model_summary",
+      "description": "\nGet basic model information (Building, Site, SimulationControl, Version)\n\nArgs:\n    idf_path: Path to the IDF file\n\nReturns:\n    JSON string with model summary information\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "idf_path"
+        ],
+        "title": "get_model_summaryArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "check_simulation_settings",
+      "description": "\nCheck SimulationControl and RunPeriod settings with information about modifiable fields\n\nArgs:\n    idf_path: Path to the IDF file\n\nReturns:\n    JSON string with current settings and descriptions of modifiable fields\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "idf_path"
+        ],
+        "title": "check_simulation_settingsArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "inspect_schedules",
+      "description": "\nInspect and inventory all schedule objects in the EnergyPlus model\n\nArgs:\n    idf_path: Path to the IDF file\n    include_values: Whether to extract actual schedule values (default: False)\n\nReturns:\n    JSON string with detailed schedule inventory and analysis\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          },
+          "include_values": {
+            "default": false,
+            "title": "Include Values",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "idf_path"
+        ],
+        "title": "inspect_schedulesArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "inspect_people",
+      "description": "\nInspect and list all People objects in the EnergyPlus model\n\nArgs:\n    idf_path: Path to the IDF file\n\nReturns:\n    JSON string with detailed People objects information including:\n    - Name, zone, and schedule associations\n    - Calculation method (People, People/Area, Area/Person)\n    - Occupancy values and thermal comfort settings\n    - Summary statistics by zone and calculation method\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "idf_path"
+        ],
+        "title": "inspect_peopleArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "modify_people",
+      "description": "\nModify People objects in the EnergyPlus model\n\nArgs:\n    idf_path: Path to the input IDF file\n    modifications: List of modification specifications. Each item should contain:\n                  - \"target\": Specifies which People objects to modify\n                    - \"all\": Apply to all People objects\n                    - \"zone:ZoneName\": Apply to People objects in specific zone\n                    - \"name:PeopleName\": Apply to specific People object by name\n                  - \"field_updates\": Dictionary of field names and new values\n                    Valid fields include:\n                    - Number_of_People_Schedule_Name\n                    - Number_of_People_Calculation_Method (People, People/Area, Area/Person)\n                    - Number_of_People\n                    - People_per_Floor_Area\n                    - Floor_Area_per_Person\n                    - Fraction_Radiant\n                    - Sensible_Heat_Fraction\n                    - Activity_Level_Schedule_Name\n                    - Carbon_Dioxide_Generation_Rate\n                    - Clothing_Insulation_Schedule_Name\n                    - Air_Velocity_Schedule_Name\n                    - Thermal_Comfort_Model_1_Type\n                    - Thermal_Comfort_Model_2_Type\n    output_path: Optional path for output file (if None, creates one with _modified suffix)\n\nReturns:\n    JSON string with modification results\n    \nExamples:\n    # Modify all People objects to use 0.1 people/m2\n    modify_people(\"model.idf\", [\n        {\n            \"target\": \"all\",\n            \"field_updates\": {\n                \"Number_of_People_Calculation_Method\": \"People/Area\",\n                \"People_per_Floor_Area\": 0.1\n            }\n        }\n    ])\n    \n    # Modify People objects in specific zone\n    modify_people(\"model.idf\", [\n        {\n            \"target\": \"zone:Office Zone\",\n            \"field_updates\": {\n                \"Number_of_People\": 10,\n                \"Activity_Level_Schedule_Name\": \"Office Activity\"\n            }\n        }\n    ])\n    \n    # Modify specific People object by name\n    modify_people(\"model.idf\", [\n        {\n            \"target\": \"name:Office People\",\n            \"field_updates\": {\n                \"Fraction_Radiant\": 0.3,\n                \"Sensible_Heat_Fraction\": 0.6\n            }\n        }\n    ])\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          },
+          "modifications": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Modifications",
+            "type": "array"
+          },
+          "output_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Output Path"
+          }
+        },
+        "required": [
+          "idf_path",
+          "modifications"
+        ],
+        "title": "modify_peopleArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "inspect_lights",
+      "description": "\nInspect and list all Lights objects in the EnergyPlus model\n\nArgs:\n    idf_path: Path to the IDF file\n\nReturns:\n    JSON string with detailed Lights objects information including:\n    - Name, zone, and schedule associations\n    - Calculation method (LightingLevel, Watts/Area, Watts/Person)\n    - Lighting power values and heat fraction settings\n    - Summary statistics by zone and calculation method\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "idf_path"
+        ],
+        "title": "inspect_lightsArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "modify_lights",
+      "description": "\nModify Lights objects in the EnergyPlus model\n\nArgs:\n    idf_path: Path to the input IDF file\n    modifications: List of modification specifications. Each item should contain:\n                  - \"target\": Specifies which Lights objects to modify\n                    - \"all\": Apply to all Lights objects\n                    - \"zone:ZoneName\": Apply to Lights objects in specific zone\n                    - \"name:LightsName\": Apply to specific Lights object by name\n                  - \"field_updates\": Dictionary of field names and new values\n                    Valid fields include:\n                    - Schedule_Name\n                    - Design_Level_Calculation_Method (LightingLevel, Watts/Area, Watts/Person)\n                    - Lighting_Level\n                    - Watts_per_Floor_Area\n                    - Watts_per_Person\n                    - Return_Air_Fraction\n                    - Fraction_Radiant\n                    - Fraction_Visible\n                    - Fraction_Replaceable\n                    - EndUse_Subcategory\n                    - Return_Air_Fraction_Calculated_from_Plenum_Temperature\n                    - Return_Air_Fraction_Function_of_Plenum_Temperature_Coefficient_1\n                    - Return_Air_Fraction_Function_of_Plenum_Temperature_Coefficient_2\n                    - Return_Air_Heat_Gain_Node_Name\n                    - Exhaust_Air_Heat_Gain_Node_Name\n    output_path: Optional path for output file (if None, creates one with _modified suffix)\n\nReturns:\n    JSON string with modification results\n    \nExamples:\n    # Modify all Lights objects to use 10 W/m2\n    modify_lights(\"model.idf\", [\n        {\n            \"target\": \"all\",\n            \"field_updates\": {\n                \"Design_Level_Calculation_Method\": \"Watts/Area\",\n                \"Watts_per_Floor_Area\": 10.0\n            }\n        }\n    ])\n    \n    # Modify Lights objects in specific zone\n    modify_lights(\"model.idf\", [\n        {\n            \"target\": \"zone:Office Zone\",\n            \"field_updates\": {\n                \"Lighting_Level\": 2000,\n                \"Schedule_Name\": \"Office Lighting Schedule\"\n            }\n        }\n    ])\n    \n    # Modify specific Lights object by name\n    modify_lights(\"model.idf\", [\n        {\n            \"target\": \"name:Office Lights\",\n            \"field_updates\": {\n                \"Fraction_Radiant\": 0.42,\n                \"Fraction_Visible\": 0.18\n            }\n        }\n    ])\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          },
+          "modifications": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Modifications",
+            "type": "array"
+          },
+          "output_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Output Path"
+          }
+        },
+        "required": [
+          "idf_path",
+          "modifications"
+        ],
+        "title": "modify_lightsArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "inspect_electric_equipment",
+      "description": "\nInspect and list all ElectricEquipment objects in the EnergyPlus model\n\nArgs:\n    idf_path: Path to the IDF file\n\nReturns:\n    JSON string with detailed ElectricEquipment objects information including:\n    - Name, zone, and schedule associations\n    - Calculation method (EquipmentLevel, Watts/Area, Watts/Person)\n    - Equipment power values and heat fraction settings\n    - Summary statistics by zone and calculation method\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "idf_path"
+        ],
+        "title": "inspect_electric_equipmentArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "modify_electric_equipment",
+      "description": "\nModify ElectricEquipment objects in the EnergyPlus model\n\nArgs:\n    idf_path: Path to the input IDF file\n    modifications: List of modification specifications. Each item should contain:\n                  - \"target\": Specifies which ElectricEquipment objects to modify\n                    - \"all\": Apply to all ElectricEquipment objects\n                    - \"zone:ZoneName\": Apply to ElectricEquipment objects in specific zone\n                    - \"name:ElectricEquipmentName\": Apply to specific ElectricEquipment object by name\n                  - \"field_updates\": Dictionary of field names and new values\n                    Valid fields include:\n                    - Schedule_Name\n                    - Design_Level_Calculation_Method (EquipmentLevel, Watts/Area, Watts/Person)\n                    - Design_Level\n                    - Watts_per_Floor_Area\n                    - Watts_per_Person\n                    - Fraction_Latent\n                    - Fraction_Radiant\n                    - Fraction_Lost\n                    - EndUse_Subcategory\n    output_path: Optional path for output file (if None, creates one with _modified suffix)\n\nReturns:\n    JSON string with modification results\n    \nExamples:\n    # Modify all ElectricEquipment objects to use 15 W/m2\n    modify_electric_equipment(\"model.idf\", [\n        {\n            \"target\": \"all\",\n            \"field_updates\": {\n                \"Design_Level_Calculation_Method\": \"Watts/Area\",\n                \"Watts_per_Floor_Area\": 15.0\n            }\n        }\n    ])\n    \n    # Modify ElectricEquipment objects in specific zone\n    modify_electric_equipment(\"model.idf\", [\n        {\n            \"target\": \"zone:Office Zone\",\n            \"field_updates\": {\n                \"Design_Level\": 3000,\n                \"Schedule_Name\": \"Office Equipment Schedule\"\n            }\n        }\n    ])\n    \n    # Modify specific ElectricEquipment object by name\n    modify_electric_equipment(\"model.idf\", [\n        {\n            \"target\": \"name:Office Equipment\",\n            \"field_updates\": {\n                \"Fraction_Radiant\": 0.3,\n                \"Fraction_Latent\": 0.1\n            }\n        }\n    ])\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          },
+          "modifications": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Modifications",
+            "type": "array"
+          },
+          "output_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Output Path"
+          }
+        },
+        "required": [
+          "idf_path",
+          "modifications"
+        ],
+        "title": "modify_electric_equipmentArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "modify_simulation_control",
+      "description": "\nModify SimulationControl settings and save to a new file\n\nArgs:\n    idf_path: Path to the input IDF file\n    field_updates: Dictionary with field names and new values (e.g., {\"Run_Simulation_for_Weather_File_Run_Periods\": \"Yes\"})\n    output_path: Optional path for output file (if None, creates one with _modified suffix)\n\nReturns:\n    JSON string with modification results\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          },
+          "field_updates": {
+            "additionalProperties": true,
+            "title": "Field Updates",
+            "type": "object"
+          },
+          "output_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Output Path"
+          }
+        },
+        "required": [
+          "idf_path",
+          "field_updates"
+        ],
+        "title": "modify_simulation_controlArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "modify_run_period",
+      "description": "\nModify RunPeriod settings and save to a new file\n\nArgs:\n    idf_path: Path to the input IDF file\n    field_updates: Dictionary with field names and new values (e.g., {\"Begin_Month\": 1, \"End_Month\": 3})\n    run_period_index: Index of RunPeriod to modify (default 0 for first RunPeriod)\n    output_path: Optional path for output file (if None, creates one with _modified suffix)\n\nReturns:\n    JSON string with modification results\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          },
+          "field_updates": {
+            "additionalProperties": true,
+            "title": "Field Updates",
+            "type": "object"
+          },
+          "run_period_index": {
+            "default": 0,
+            "title": "Run Period Index",
+            "type": "integer"
+          },
+          "output_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Output Path"
+          }
+        },
+        "required": [
+          "idf_path",
+          "field_updates"
+        ],
+        "title": "modify_run_periodArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "change_infiltration_by_mult",
+      "description": "\nModify infiltration in ZoneInfiltration:DesignFlowRate and save to a new file\n\nArgs:\n    idf_path: Path to the input IDF file\n    mult: Multiplicative factor to apply to all ZoneInfiltration:DesignFlowRate objects\n    output_path: Optional path for output file (if None, creates one with _modified suffix)\n\nReturns:\n    JSON string with modification results\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          },
+          "mult": {
+            "title": "Mult",
+            "type": "number"
+          },
+          "output_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Output Path"
+          }
+        },
+        "required": [
+          "idf_path",
+          "mult"
+        ],
+        "title": "change_infiltration_by_multArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "add_window_film_outside",
+      "description": "\nAdd exterior window film to all exterior windows using WindowMaterial:SimpleGlazingSystem\n\nArgs:\n    idf_path: Path to the input IDF file\n    u_value: U-value of the window film (default: 4.94 W/m\u00b2\u00b7K from CBES)\n    shgc: Solar Heat Gain Coefficient of the window film (default: 0.45)\n    visible_transmittance: Visible transmittance of the window film (default: 0.66)\n    output_path: Optional path for output file (if None, creates one with _modified suffix)\n\nReturns:\n    JSON string with modification results\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          },
+          "u_value": {
+            "default": 4.94,
+            "title": "U Value",
+            "type": "number"
+          },
+          "shgc": {
+            "default": 0.45,
+            "title": "Shgc",
+            "type": "number"
+          },
+          "visible_transmittance": {
+            "default": 0.66,
+            "title": "Visible Transmittance",
+            "type": "number"
+          },
+          "output_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Output Path"
+          }
+        },
+        "required": [
+          "idf_path"
+        ],
+        "title": "add_window_film_outsideArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "add_coating_outside",
+      "description": "\nAdd exterior coating to all exterior surfaces of the specified location (wall or roof)\n\nArgs:\n    idf_path: Path to the input IDF file\n    location: Surface type - either \"wall\" or \"roof\"\n    solar_abs: Solar Absorptance of the exterior coating (default: 0.4)\n    thermal_abs: Thermal Absorptance of the exterior coating (default: 0.9)\n    output_path: Optional path for output file (if None, creates one with _modified suffix)\n\nReturns:\n    JSON string with modification results\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          },
+          "location": {
+            "title": "Location",
+            "type": "string"
+          },
+          "solar_abs": {
+            "default": 0.4,
+            "title": "Solar Abs",
+            "type": "number"
+          },
+          "thermal_abs": {
+            "default": 0.9,
+            "title": "Thermal Abs",
+            "type": "number"
+          },
+          "output_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Output Path"
+          }
+        },
+        "required": [
+          "idf_path",
+          "location"
+        ],
+        "title": "add_coating_outsideArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "list_zones",
+      "description": "\nList all zones in the EnergyPlus model\n\nArgs:\n    idf_path: Path to the IDF file\n\nReturns:\n    JSON string with detailed zone information\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "idf_path"
+        ],
+        "title": "list_zonesArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_surfaces",
+      "description": "\nGet detailed surface information from the EnergyPlus model\n\nArgs:\n    idf_path: Path to the IDF file\n\nReturns:\n    JSON string with surface details\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "idf_path"
+        ],
+        "title": "get_surfacesArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_materials",
+      "description": "\nGet material information from the EnergyPlus model\n\nArgs:\n    idf_path: Path to the IDF file\n\nReturns:\n    JSON string with material details\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "idf_path"
+        ],
+        "title": "get_materialsArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "validate_idf",
+      "description": "\nValidate an EnergyPlus IDF file and return validation results\n\nArgs:\n    idf_path: Path to the IDF file\n\nReturns:\n    JSON string with validation results, warnings, and errors\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "idf_path"
+        ],
+        "title": "validate_idfArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_output_variables",
+      "description": "\nGet output variables from the model - either configured variables or discover all available ones\n\nArgs:\n    idf_path: Path to the IDF file (can be absolute, relative, or just filename for sample files)\n    discover_available: If True, runs a short simulation to discover all available variables. \n                      If False, returns currently configured variables in the IDF (default: False)\n    run_days: Number of days to run for discovery simulation (default: 1, only used if discover_available=True)\n\nReturns:\n    JSON string with output variables information. When discover_available=True, includes\n    all possible variables with units, frequencies, and ready-to-use Output:Variable lines.\n    When discover_available=False, shows only currently configured Output:Variable and Output:Meter objects.\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          },
+          "discover_available": {
+            "default": false,
+            "title": "Discover Available",
+            "type": "boolean"
+          },
+          "run_days": {
+            "default": 1,
+            "title": "Run Days",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "idf_path"
+        ],
+        "title": "get_output_variablesArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_output_meters",
+      "description": "\nGet output meters from the model - either configured meters or discover all available ones\n\nArgs:\n    idf_path: Path to the IDF file (can be absolute, relative, or just filename for sample files)\n    discover_available: If True, runs a short simulation to discover all available meters.\n                      If False, returns currently configured meters in the IDF (default: False)\n    run_days: Number of days to run for discovery simulation (default: 1, only used if discover_available=True)\n\nReturns:\n    JSON string with meter information. When discover_available=True, includes\n    all possible meters with units, frequencies, and ready-to-use Output:Meter lines.\n    When discover_available=False, shows only currently configured Output:Meter objects.\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          },
+          "discover_available": {
+            "default": false,
+            "title": "Discover Available",
+            "type": "boolean"
+          },
+          "run_days": {
+            "default": 1,
+            "title": "Run Days",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "idf_path"
+        ],
+        "title": "get_output_metersArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "add_output_variables",
+      "description": "\nAdd output variables to an EnergyPlus IDF file with intelligent validation\n\nArgs:\n    idf_path: Path to the input IDF file (can be absolute, relative, or filename for sample files)\n    variables: List of variable specifications. Can be:\n              - Simple strings: [\"Zone Air Temperature\", \"Surface Inside Face Temperature\"] \n              - [name, frequency] pairs: [[\"Zone Air Temperature\", \"hourly\"], [\"Surface Temperature\", \"daily\"]]\n              - Full specifications: [{\"key_value\": \"*\", \"variable_name\": \"Zone Air Temperature\", \"frequency\": \"hourly\"}]\n              - Mixed formats in the same list\n    validation_level: Validation strictness level:\n                     - \"strict\": Full validation with model checking (recommended for beginners)\n                     - \"moderate\": Basic validation with helpful warnings (default)\n                     - \"lenient\": Minimal validation (for advanced users)\n    allow_duplicates: Whether to allow duplicate output variable specifications (default: False)\n    output_path: Optional path for output file (if None, creates one with _with_outputs suffix)\n\nReturns:\n    JSON string with detailed results including validation report, added variables, and performance metrics\n    \nExamples:\n    # Simple usage\n    add_output_variables(\"model.idf\", [\"Zone Air Temperature\", \"Zone Air Relative Humidity\"])\n    \n    # With custom frequencies  \n    add_output_variables(\"model.idf\", [[\"Zone Air Temperature\", \"daily\"], [\"Surface Temperature\", \"hourly\"]])\n    \n    # Full control\n    add_output_variables(\"model.idf\", [\n        {\"key_value\": \"Zone1\", \"variable_name\": \"Zone Air Temperature\", \"frequency\": \"hourly\"},\n        {\"key_value\": \"*\", \"variable_name\": \"Surface Inside Face Temperature\", \"frequency\": \"daily\"}\n    ], validation_level=\"strict\")\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          },
+          "variables": {
+            "items": {},
+            "title": "Variables",
+            "type": "array"
+          },
+          "validation_level": {
+            "default": "moderate",
+            "title": "Validation Level",
+            "type": "string"
+          },
+          "allow_duplicates": {
+            "default": false,
+            "title": "Allow Duplicates",
+            "type": "boolean"
+          },
+          "output_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Output Path"
+          }
+        },
+        "required": [
+          "idf_path",
+          "variables"
+        ],
+        "title": "add_output_variablesArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "add_output_meters",
+      "description": "\nAdd output meters to an EnergyPlus IDF file with intelligent validation\n\nArgs:\n    idf_path: Path to the input IDF file (can be absolute, relative, or filename for sample files)\n    meters: List of meter specifications. Can be:\n           - Simple strings: [\"Electricity:Facility\", \"NaturalGas:Facility\"] \n           - [name, frequency] pairs: [[\"Electricity:Facility\", \"hourly\"], [\"NaturalGas:Facility\", \"daily\"]]\n           - [name, frequency, type] triplets: [[\"Electricity:Facility\", \"hourly\", \"Output:Meter\"]]\n           - Full specifications: [{\"meter_name\": \"Electricity:Facility\", \"frequency\": \"hourly\", \"meter_type\": \"Output:Meter\"}]\n           - Mixed formats in the same list\n    validation_level: Validation strictness level:\n                     - \"strict\": Full validation with model checking (recommended for beginners)\n                     - \"moderate\": Basic validation with helpful warnings (default)\n                     - \"lenient\": Minimal validation (for advanced users)\n    allow_duplicates: Whether to allow duplicate output meter specifications (default: False)\n    output_path: Optional path for output file (if None, creates one with _with_meters suffix)\n\nReturns:\n    JSON string with detailed results including validation report, added meters, and performance metrics\n    \nExamples:\n    # Simple usage\n    add_output_meters(\"model.idf\", [\"Electricity:Facility\", \"NaturalGas:Facility\"])\n    \n    # With custom frequencies  \n    add_output_meters(\"model.idf\", [[\"Electricity:Facility\", \"daily\"], [\"NaturalGas:Facility\", \"hourly\"]])\n    \n    # Full control with meter types\n    add_output_meters(\"model.idf\", [\n        {\"meter_name\": \"Electricity:Facility\", \"frequency\": \"hourly\", \"meter_type\": \"Output:Meter\"},\n        {\"meter_name\": \"NaturalGas:Facility\", \"frequency\": \"daily\", \"meter_type\": \"Output:Meter:Cumulative\"}\n    ], validation_level=\"strict\")\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          },
+          "meters": {
+            "items": {},
+            "title": "Meters",
+            "type": "array"
+          },
+          "validation_level": {
+            "default": "moderate",
+            "title": "Validation Level",
+            "type": "string"
+          },
+          "allow_duplicates": {
+            "default": false,
+            "title": "Allow Duplicates",
+            "type": "boolean"
+          },
+          "output_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Output Path"
+          }
+        },
+        "required": [
+          "idf_path",
+          "meters"
+        ],
+        "title": "add_output_metersArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "list_available_files",
+      "description": "\nList available files in specified directories\n\nArgs:\n    include_example_files: Whether to include EnergyPlus example files directory (default: False)\n    include_weather_data: Whether to include EnergyPlus weather data directory (default: False)\n\nReturns:\n    JSON string with available files organized by source and type. Always includes sample_files directory.\n",
+      "input_schema": {
+        "properties": {
+          "include_example_files": {
+            "default": false,
+            "title": "Include Example Files",
+            "type": "boolean"
+          },
+          "include_weather_data": {
+            "default": false,
+            "title": "Include Weather Data",
+            "type": "boolean"
+          }
+        },
+        "title": "list_available_filesArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_server_configuration",
+      "description": "\nGet current server configuration information\n\nReturns:\n    JSON string with configuration details\n",
+      "input_schema": {
+        "properties": {},
+        "title": "get_server_configurationArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_server_status",
+      "description": "\nGet current server status and health information\n\nReturns:\n    JSON string with server status\n",
+      "input_schema": {
+        "properties": {},
+        "title": "get_server_statusArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "discover_hvac_loops",
+      "description": "\nDiscover all HVAC loops (Plant, Condenser, Air) in the EnergyPlus model\n\nArgs:\n    idf_path: Path to the IDF file\n\nReturns:\n    JSON string with all HVAC loops found, organized by type\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "idf_path"
+        ],
+        "title": "discover_hvac_loopsArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_loop_topology",
+      "description": "\nGet detailed topology information for a specific HVAC loop\n\nArgs:\n    idf_path: Path to the IDF file\n    loop_name: Name of the specific loop to analyze\n\nReturns:\n    JSON string with detailed loop topology including supply/demand sides, branches, and components\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          },
+          "loop_name": {
+            "title": "Loop Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "idf_path",
+          "loop_name"
+        ],
+        "title": "get_loop_topologyArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "visualize_loop_diagram",
+      "description": "\nGenerate and save a visual diagram of HVAC loop(s)\n\nArgs:\n    idf_path: Path to the IDF file\n    loop_name: Optional specific loop name (if None, shows all loops)\n    output_path: Optional custom output path (if None, creates one automatically)\n    format: Image format for the diagram (png, jpg, pdf, svg)\n    show_legend: Whether to include a legend in the diagram (default: True)\n\nReturns:\n    JSON string with diagram generation results and file path\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          },
+          "loop_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Loop Name"
+          },
+          "output_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Output Path"
+          },
+          "format": {
+            "default": "png",
+            "title": "Format",
+            "type": "string"
+          },
+          "show_legend": {
+            "default": true,
+            "title": "Show Legend",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "idf_path"
+        ],
+        "title": "visualize_loop_diagramArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "run_energyplus_simulation",
+      "description": "\nRun EnergyPlus simulation with specified IDF and weather file\n\nArgs:\n    idf_path: Path to the IDF file (can be absolute, relative, or just filename for sample files)\n    weather_file: Path to weather file (.epw) or city name (e.g., 'San Francisco'). If None, simulation runs without weather file\n    output_directory: Directory for simulation outputs (if None, creates timestamped directory in outputs/)\n    annual: Run annual simulation (default: True)\n    design_day: Run design day only simulation (default: False) \n    readvars: Run ReadVarsESO after simulation to process outputs (default: True)\n    expandobjects: Run ExpandObjects prior to simulation for HVAC templates (default: True)\n\nReturns:\n    JSON string with simulation results, duration, and output file paths\n",
+      "input_schema": {
+        "properties": {
+          "idf_path": {
+            "title": "Idf Path",
+            "type": "string"
+          },
+          "weather_file": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Weather File"
+          },
+          "output_directory": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Output Directory"
+          },
+          "annual": {
+            "default": true,
+            "title": "Annual",
+            "type": "boolean"
+          },
+          "design_day": {
+            "default": false,
+            "title": "Design Day",
+            "type": "boolean"
+          },
+          "readvars": {
+            "default": true,
+            "title": "Readvars",
+            "type": "boolean"
+          },
+          "expandobjects": {
+            "default": true,
+            "title": "Expandobjects",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "idf_path"
+        ],
+        "title": "run_energyplus_simulationArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "create_interactive_plot",
+      "description": "\nCreate interactive HTML plot from EnergyPlus output files (meter or variable outputs)\n\nArgs:\n    output_directory: Directory containing the CSV output files from simulation\n    idf_name: Name of the IDF file (without extension). If None, auto-detects from files\n    file_type: Type of file to plot - \"meter\", \"variable\", or \"auto\" (default: auto)\n    custom_title: Custom title for the plot (optional)\n\nReturns:\n    JSON string with plot creation results and file path\n",
+      "input_schema": {
+        "properties": {
+          "output_directory": {
+            "title": "Output Directory",
+            "type": "string"
+          },
+          "idf_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Idf Name"
+          },
+          "file_type": {
+            "default": "auto",
+            "title": "File Type",
+            "type": "string"
+          },
+          "custom_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Custom Title"
+          }
+        },
+        "required": [
+          "output_directory"
+        ],
+        "title": "create_interactive_plotArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_server_logs",
+      "description": "\nGet recent server log entries\n\nArgs:\n    lines: Number of recent log lines to return (default 50)\n\nReturns:\n    Recent log entries as text\n",
+      "input_schema": {
+        "properties": {
+          "lines": {
+            "default": 50,
+            "title": "Lines",
+            "type": "integer"
+          }
+        },
+        "title": "get_server_logsArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_error_logs",
+      "description": "\nGet recent error log entries\n\nArgs:\n    lines: Number of recent error lines to return (default 20)\n\nReturns:\n    Recent error log entries as text\n",
+      "input_schema": {
+        "properties": {
+          "lines": {
+            "default": 20,
+            "title": "Lines",
+            "type": "integer"
+          }
+        },
+        "title": "get_error_logsArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "clear_logs",
+      "description": "\nClear/rotate current log files (creates backup)\n\nReturns:\n    Status of log clearing operation\n",
+      "input_schema": {
+        "properties": {},
+        "title": "clear_logsArguments",
+        "type": "object"
+      }
+    }
+  ],
+  "required_tools_present": true
+}

@@ -1,0 +1,269 @@
+{
+  "status": "pass",
+  "scenario_count": 13,
+  "passed_count": 13,
+  "all_final_selections_bounded": true,
+  "all_final_policies_safe": true,
+  "results": [
+    {
+      "mode": "valid_top_deterministic",
+      "request_count": 1,
+      "fallback_used": false,
+      "failure_reason": "",
+      "parser_failure": false,
+      "timeout": false,
+      "candidate_ids": [
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "deterministic_recommendation_id": "P4",
+      "final_selected_policy_id": "P4",
+      "selected_policy_source": "llm_selected",
+      "final_selection_belongs_to_set": true,
+      "final_policy_safe": true,
+      "passed": true
+    },
+    {
+      "mode": "valid_alternative_high_confidence",
+      "request_count": 1,
+      "fallback_used": false,
+      "failure_reason": "",
+      "parser_failure": false,
+      "timeout": false,
+      "candidate_ids": [
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "deterministic_recommendation_id": "P4",
+      "final_selected_policy_id": "P3",
+      "selected_policy_source": "llm_selected",
+      "final_selection_belongs_to_set": true,
+      "final_policy_safe": true,
+      "passed": true
+    },
+    {
+      "mode": "valid_medium_confidence_top_two",
+      "request_count": 1,
+      "fallback_used": false,
+      "failure_reason": "",
+      "parser_failure": false,
+      "timeout": false,
+      "candidate_ids": [
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "deterministic_recommendation_id": "P4",
+      "final_selected_policy_id": "P3",
+      "selected_policy_source": "llm_selected",
+      "final_selection_belongs_to_set": true,
+      "final_policy_safe": true,
+      "passed": true
+    },
+    {
+      "mode": "low_confidence",
+      "request_count": 1,
+      "fallback_used": true,
+      "failure_reason": "confidence below 0.50; deterministic recommendation used",
+      "parser_failure": false,
+      "timeout": false,
+      "candidate_ids": [
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "deterministic_recommendation_id": "P4",
+      "final_selected_policy_id": "P4",
+      "selected_policy_source": "deterministic_fallback",
+      "final_selection_belongs_to_set": true,
+      "final_policy_safe": true,
+      "passed": true
+    },
+    {
+      "mode": "unknown_candidate",
+      "request_count": 1,
+      "fallback_used": true,
+      "failure_reason": "unknown or missing candidate ID; deterministic recommendation used",
+      "parser_failure": false,
+      "timeout": false,
+      "candidate_ids": [
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "deterministic_recommendation_id": "P4",
+      "final_selected_policy_id": "P4",
+      "selected_policy_source": "deterministic_fallback",
+      "final_selection_belongs_to_set": true,
+      "final_policy_safe": true,
+      "passed": true
+    },
+    {
+      "mode": "duplicate_ranking",
+      "request_count": 1,
+      "fallback_used": true,
+      "failure_reason": "CandidateRankingParserError: ranking must not contain duplicate candidate IDs.",
+      "parser_failure": true,
+      "timeout": false,
+      "candidate_ids": [
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "deterministic_recommendation_id": "P4",
+      "final_selected_policy_id": "P4",
+      "selected_policy_source": "deterministic_fallback",
+      "final_selection_belongs_to_set": true,
+      "final_policy_safe": true,
+      "passed": true
+    },
+    {
+      "mode": "incomplete_ranking",
+      "request_count": 1,
+      "fallback_used": true,
+      "failure_reason": "incomplete ranking; deterministic recommendation used",
+      "parser_failure": false,
+      "timeout": false,
+      "candidate_ids": [
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "deterministic_recommendation_id": "P4",
+      "final_selected_policy_id": "P4",
+      "selected_policy_source": "deterministic_fallback",
+      "final_selection_belongs_to_set": true,
+      "final_policy_safe": true,
+      "passed": true
+    },
+    {
+      "mode": "selected_not_first",
+      "request_count": 1,
+      "fallback_used": true,
+      "failure_reason": "selected_policy_id is not ranking[0]; deterministic recommendation used",
+      "parser_failure": false,
+      "timeout": false,
+      "candidate_ids": [
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "deterministic_recommendation_id": "P4",
+      "final_selected_policy_id": "P4",
+      "selected_policy_source": "deterministic_fallback",
+      "final_selection_belongs_to_set": true,
+      "final_policy_safe": true,
+      "passed": true
+    },
+    {
+      "mode": "extra_actuator_field",
+      "request_count": 1,
+      "fallback_used": true,
+      "failure_reason": "CandidateRankingParserError: Ranking response has unexpected keys: supply_air_temperature_setpoint",
+      "parser_failure": true,
+      "timeout": false,
+      "candidate_ids": [
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "deterministic_recommendation_id": "P4",
+      "final_selected_policy_id": "P4",
+      "selected_policy_source": "deterministic_fallback",
+      "final_selection_belongs_to_set": true,
+      "final_policy_safe": true,
+      "passed": true
+    },
+    {
+      "mode": "extra_policy_values",
+      "request_count": 1,
+      "fallback_used": true,
+      "failure_reason": "CandidateRankingParserError: Ranking response has unexpected keys: target_zone_temperature_c",
+      "parser_failure": true,
+      "timeout": false,
+      "candidate_ids": [
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "deterministic_recommendation_id": "P4",
+      "final_selected_policy_id": "P4",
+      "selected_policy_source": "deterministic_fallback",
+      "final_selection_belongs_to_set": true,
+      "final_policy_safe": true,
+      "passed": true
+    },
+    {
+      "mode": "malformed_json",
+      "request_count": 1,
+      "fallback_used": true,
+      "failure_reason": "CandidateRankingParserError: Candidate ranking is not strict JSON: Expecting value: line 1 column 1 (char 0)",
+      "parser_failure": true,
+      "timeout": false,
+      "candidate_ids": [
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "deterministic_recommendation_id": "P4",
+      "final_selected_policy_id": "P4",
+      "selected_policy_source": "deterministic_fallback",
+      "final_selection_belongs_to_set": true,
+      "final_policy_safe": true,
+      "passed": true
+    },
+    {
+      "mode": "timeout",
+      "request_count": 1,
+      "fallback_used": true,
+      "failure_reason": "LLMTimeoutError: Mock candidate ranker timed out",
+      "parser_failure": false,
+      "timeout": true,
+      "candidate_ids": [
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "deterministic_recommendation_id": "P4",
+      "final_selected_policy_id": "P4",
+      "selected_policy_source": "deterministic_fallback",
+      "final_selection_belongs_to_set": true,
+      "final_policy_safe": true,
+      "passed": true
+    },
+    {
+      "mode": "exception",
+      "request_count": 1,
+      "fallback_used": true,
+      "failure_reason": "RuntimeError: Mock candidate ranker unavailable",
+      "parser_failure": false,
+      "timeout": false,
+      "candidate_ids": [
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "deterministic_recommendation_id": "P4",
+      "final_selected_policy_id": "P4",
+      "selected_policy_source": "deterministic_fallback",
+      "final_selection_belongs_to_set": true,
+      "final_policy_safe": true,
+      "passed": true
+    }
+  ]
+}

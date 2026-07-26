@@ -1,0 +1,80 @@
+{
+  "status": "pass",
+  "ollama_integrated": false,
+  "semantic_migration": {
+    "previous_term": "cooling_setpoint",
+    "source_of_truth_field": "supply_air_temperature_setpoint",
+    "meaning": "Requested temperature setpoint for MAIN COOLING COIL 1 OUTLET NODE",
+    "legacy_read_only_alias": "ControlAction.cooling_setpoint",
+    "legacy_llm_field_accepted": false
+  },
+  "energyplus_boundary": {
+    "component_type": "System Node Setpoint",
+    "control_type": "Temperature Setpoint",
+    "actuator_key": "MAIN COOLING COIL 1 OUTLET NODE",
+    "callback": "callback_after_predictor_after_hvac_managers",
+    "minimum_setpoint_c": 22.0,
+    "maximum_setpoint_c": 25.0,
+    "maximum_change_per_decision_c": 1.0,
+    "runtime_api_registration_preserved": true,
+    "actuator_writes_confined_to_actuator_writer": true
+  },
+  "decision_cadence": {
+    "configured_interval_timesteps": 6,
+    "idf_timesteps_per_hour": 6,
+    "zone_timestep_minutes": 10,
+    "actual_interval_minutes": 60,
+    "llm_called_during_warmup": false,
+    "startup_action_source": "RuleController"
+  },
+  "validation": {
+    "python_compilation_passed": true,
+    "unit_tests": {
+      "passed": 45,
+      "failed": 0
+    },
+    "mock_energyplus_scenarios": {
+      "passed": 12,
+      "failed": 0,
+      "sensor_rows_per_scenario": 9216,
+      "severe_errors_total": 0,
+      "llm_calls_per_successful_llm_scenario": 1536,
+      "reused_actions_per_llm_scenario": 7679,
+      "scenarios": [
+        "rule",
+        "llm_valid",
+        "llm_unsafe_low",
+        "llm_unsafe_high",
+        "llm_malformed_json",
+        "llm_missing_field",
+        "llm_wrong_type",
+        "llm_wrong_field",
+        "llm_empty_response",
+        "llm_exception",
+        "llm_timeout",
+        "llm_alternating"
+      ]
+    },
+    "physical_ab": {
+      "passed": true,
+      "low_command_c": 22.0,
+      "high_command_c": 25.0,
+      "low_coil_outlet_temperature_c": 22.0,
+      "high_coil_outlet_temperature_c": 25.0,
+      "mean_zone_temperature_difference_c": 3.669961,
+      "mean_hvac_power_difference_kw": 1.461865,
+      "exit_codes_zero": true,
+      "severe_errors_total": 0
+    }
+  },
+  "limitations": [
+    "Occupancy and PMV are unavailable from the current model and remain null.",
+    "The installed qwen3:8b model failed the guarded boundary benchmark and was not used in EnergyPlus."
+  ],
+  "supporting_reports": [
+    "test_reports/semantic_mock_validation_report.md",
+    "test_reports/semantic_mock_validation_results.json",
+    "test_reports/coil_outlet_node_ab_report.md",
+    "test_reports/coil_outlet_node_ab_result.json"
+  ]
+}

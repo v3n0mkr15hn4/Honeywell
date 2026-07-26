@@ -1,0 +1,36 @@
+{
+  "protocol": "native_function_calling",
+  "maximum_agent_steps": 10,
+  "maximum_simulation_calls": 1,
+  "modification_limit": 0,
+  "mock_validation": {
+    "validation_before_simulation": "pass",
+    "simulation_requires_human_approval": "pass",
+    "unknown_tool_rejected": "pass",
+    "modification_rejected": "pass",
+    "cross_run_path_rejected": "pass",
+    "malformed_json_fails_closed": "pass",
+    "maximum_steps_enforced": "pass",
+    "second_simulation_rejected": "pass",
+    "tool_failure_is_observable": "pass",
+    "hidden_chain_of_thought_not_recorded": "pass"
+  },
+  "real_nvidia_agent_test": {
+    "status": "pass",
+    "run_id": "ed9f2fcd09bb44e5ad17c748d027c3e7",
+    "successful_tools": [
+      "check_simulation_settings",
+      "discover_hvac_loops",
+      "get_model_summary",
+      "get_output_meters",
+      "get_output_variables",
+      "load_idf_model",
+      "validate_idf"
+    ],
+    "missing_tools": [],
+    "agent_status": "completed",
+    "simulation_launched": false,
+    "activity_steps": 7
+  },
+  "result": "mock_boundary_and_real_nvidia_pass"
+}

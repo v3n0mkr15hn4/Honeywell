@@ -1,0 +1,22 @@
+{
+  "status": "pass",
+  "provider": "nvidia_nim",
+  "model": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+  "request_made": true,
+  "latency_s": 17.351232999935746,
+  "retry_count": 0,
+  "http_status_category": "2xx",
+  "failure_category": "",
+  "raw_content": "{\n  \"ranking\": [\"P4\", \"P3\", \"P5\", \"P6\"],\n  \"selected_policy_id\": \"P4\",\n  \"confidence\": 0.85,\n  \"reason\": \"Thermal state is near target and stable, but power trend is rising and high_power is true. Outdoor trend is strongly rising, indicating potential for increased cooling load. P4 balances thermal and energy considerations by slightly increasing zone_target_c to 32.5 (reducing cooling load) while maintaining conservative aggressiveness and high energy focus, which aligns with the need to manage rising power consumption without compromising thermal comfort excessively.\"\n}",
+  "strict_parsing_success": true,
+  "candidate_ids": [
+    "P3",
+    "P4",
+    "P5",
+    "P6"
+  ],
+  "selected_policy_id": "P4",
+  "final_selected_policy_id": "P4",
+  "fallback_used": false,
+  "final_policy_safe": true
+}

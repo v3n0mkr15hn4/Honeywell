@@ -1,0 +1,11 @@
+{
+  "run_id": "7bc1ac40982341a7a2ce6c6f5078e980",
+  "status": "completed",
+  "mcp_simulation_elapsed_seconds": 87.019,
+  "output_file_count": 20,
+  "fatal_errors": 0,
+  "severe_errors": 0,
+  "warnings": 5,
+  "closed_loop_compatible": false,
+  "simulation_mode": "Standard EnergyPlus"
+}

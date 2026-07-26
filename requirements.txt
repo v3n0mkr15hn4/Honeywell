@@ -1,0 +1,6 @@
+openai>=2.0,<3
+pandas>=2.2,<3
+streamlit>=1.42,<1.51
+mcp[cli]>=1.10,<2
+jsonschema>=4.23,<5
+python-dotenv>=1,<2

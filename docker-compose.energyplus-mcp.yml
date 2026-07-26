@@ -1,0 +1,47 @@
+services:
+  energyplus-mcp-venv-init:
+    build:
+      context: ../EnergyPlus-MCP/.devcontainer
+      dockerfile: Dockerfile
+    image: energyplus-mcp-dev
+    user: "0:0"
+    command: ["chown", "-R", "1000:1000", "/venv"]
+    volumes:
+      - energyplus_mcp_venv:/venv
+    restart: "no"
+
+  energyplus-mcp:
+    build:
+      context: ../EnergyPlus-MCP/.devcontainer
+      dockerfile: Dockerfile
+    image: energyplus-mcp-dev
+    depends_on:
+      energyplus-mcp-venv-init:
+        condition: service_completed_successfully
+    env_file:
+      - ../EnergyPlus-MCP/energyplus-mcp-server/.env
+    environment:
+      EPLUS_IDD_PATH: /app/software/EnergyPlusV26-1-0/Energy+.idd
+      MCP_TRANSPORT: streamable-http
+      MCP_HTTP_HOST: 0.0.0.0
+      MCP_HTTP_PORT: 8000
+      MCP_HTTP_PATH: /mcp
+      UV_LINK_MODE: copy
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../EnergyPlus-MCP/energyplus-mcp-server:/workspace/energyplus-mcp-server
+      - energyplus_mcp_venv:/workspace/energyplus-mcp-server/.venv
+      - ./simulation_workspace:/workspace/simulation_workspace
+    working_dir: /workspace/energyplus-mcp-server
+    command: uv run python -m energyplus_mcp_server.server
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+      start_period: 60s
+    restart: unless-stopped
+
+volumes:
+  energyplus_mcp_venv:

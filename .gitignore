@@ -1,0 +1,77 @@
+# Local Python environments and caches
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+secrets.*
+*.key
+
+# Editors and operating-system metadata
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# EnergyPlus and application runtime outputs
+sampleSimulation/
+simulation_workspace/
+replace_with_absolute_simulation_workspace_path/
+run_log*.txt
+*.audit
+*.bnd
+*.dxf
+*.edd
+*.eio
+*.end
+*.eso
+*.mdd
+*.mtd
+*.mtr
+*.rdd
+*.rvaudit
+*.shd
+*.sql
+*Meter.csv
+*Table.html
+eplustbl.htm
+sqlite.err
+
+# Generated test processes, logs, and bulky raw evidence
+test_reports/*.log
+test_reports/*.pid
+test_reports/*partial.json
+test_reports/*_ab_result.json
+test_reports/nvidia_nim_one_day_generated.idf
+test_reports/*_run/
+test_reports/nvidia_nim_one_day_output_20260726_184344/
+test_reports/nvidia_nim_one_day_output_*/eplusout.*
+test_reports/nvidia_nim_one_day_output_*/eplustbl.htm
+test_reports/nvidia_nim_one_day_output_*/sqlite.err
+!test_reports/nvidia_nim_one_day_output_20260726_184804/eplusout.err
+
+# Superseded local-model experiment reports
+test_reports/ollama_*
+test_reports/phi4_*
+test_reports/qwen3_*
+test_reports/selected_model_report.md
+test_reports/candidate_policy_final_readiness_decision.md
+
+# Local submission source material; publish final documentation instead
+IDEA_Presentation_Format.pptx
+pb1.png
+pb2.png
+demo_assets/judge_upload_sample/
+
+# Deployment secrets
+deployment/*.env

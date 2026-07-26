@@ -1,0 +1,71 @@
+Controller Metrics Summary
+
+Controller Type: PolicyAwareRuleController
+EnergyPlus Exit Code: 0
+Simulation Wall-Clock Duration Seconds: 41.335
+Total Energy Consumption kWh: 2675.846847
+Facility Energy kWh: 2675.846847
+HVAC Energy kWh: 300.553464
+Cooling-Coil Energy kWh: 160.875979
+Average Sampled Facility Power kW: 111.493619
+Energy Metric Source: Facility Total Electricity Demand Rate [W]
+Energy Conversion: W -> kW, then kW * timestep hours -> kWh
+Energy Samples Integrated: 144
+Average Valid PMV: Unavailable
+PMV Comfort Threshold: abs(PMV) > 0.500
+Occupied Comfort Violation Rate: Unavailable
+Average Indoor Temperature C: 32.263707
+Minimum Indoor Temperature C: 30.051370
+Maximum Indoor Temperature C: 33.198974
+Zone Temperature Target Threshold C: 30.000
+Zone Temperature Target Violation Rate: 1.000000
+Average Measured Supply-Air Temperature C: 22.436880
+Total Control Timesteps: 144
+Total Controller Decisions: 144
+Total Reused Actions: 0
+Total Supply-Air Setpoint Changes: 33
+Actuator Change Definition: one changed applied supply-air temperature setpoint
+Total Safety Corrections: 16
+Total LLM Requests: 0
+Total LLM Failures: 0
+Total RuleController Fallbacks: 0
+Total LLM Cooldown Activations: 0
+Average LLM Response Time Seconds: Unavailable
+P95 LLM Response Time Seconds: Unavailable
+Maximum LLM Response Time Seconds: Unavailable
+Total Supervisory Calls: 8
+Successful Supervisory Calls: 8
+Supervisory Parser Failures: 0
+Supervisory Timeouts: 0
+Supervisory Fallbacks: 0
+Policy Validation Corrections: 0
+Policy Changes: 3
+Policy Reuse Count: 141
+Default Policy Usage Count: 0
+Supervisor Cooldown Activations: 0
+Supervisor Cooldown Hours: 0.000000
+Average Supervisory Latency Seconds: 5.103727
+P95 Supervisory Latency Seconds: 7.651262
+Maximum Supervisory Latency Seconds: 7.651262
+Candidate Supervisory Opportunities: 8
+Forced Single-Candidate Decisions: 0
+Multi-Candidate LLM Calls: 8
+Successful Valid Candidate Rankings: 8
+Invalid Candidate Rankings: 0
+Incomplete Candidate Rankings: 0
+Duplicate-ID Candidate Rankings: 0
+Unknown Candidate ID Attempts: 0
+Low-Confidence Candidate Fallbacks: 0
+Candidate Timeout Fallbacks: 0
+Candidate Parser Failures: 0
+Candidate Selection Distribution: {'P4': 7, 'P6': 1}
+Average Candidate Confidence: 0.850000
+Median Supervisory Latency Seconds: 4.574663
+Total NVIDIA NIM Calls: 8
+Successful NVIDIA NIM Calls: 8
+NVIDIA NIM Authentication Failures: 0
+NVIDIA NIM Rate-Limit Failures: 0
+NVIDIA NIM Timeouts: 0
+NVIDIA NIM Network Failures: 0
+NVIDIA NIM Server Failures: 0
+NVIDIA NIM Deterministic Fallbacks: 0
